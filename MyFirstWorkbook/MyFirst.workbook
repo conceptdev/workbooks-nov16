@@ -1,0 +1,12 @@
+---
+uti: com.xamarin.workbook
+platform: iOS
+---
+
+# My First Workbook
+
+Simple C# assignment will render the resulting object as a string.
+
+```csharp
+var greeting = "Hello, MSDN"
+```

@@ -1,0 +1,58 @@
+---
+uti: com.xamarin.workbook
+platform: iOS
+packages:
+- id: Newtonsoft.Json
+  version: 9.0.1
+---
+
+# iOS UITableView
+
+This example uses **Json.NET** and `WebClient` to download a file *monkeydata.json* that is used to bind to the iOS UITableView.
+
+```csharp
+#r "Newtonsoft.Json"
+#load "json_monkey.csx"
+```
+
+To add a UITableView control to the screen, instantiate an instance, set the bounds, and add to the `RootViewController`. You can experiment with changing the `Frame`.
+
+```csharp
+var tableView = new UITableView();
+tableView.Frame = UIScreen.MainScreen.Bounds;
+RootViewController.View.AddSubview(tableView);
+```
+
+Wiring up a data source (like a generic list of `Monkey` objects) to a table requires a `UITableViewSource`. This class converts the data into `UITableViewCell` classes to be rendered.
+
+```csharp
+public class MySource : UITableViewSource
+{
+	string identifier = "mycell";
+	public List<Monkey> Data {get;set;} = new List<Monkey>(); // C# 6
+	public override nint RowsInSection (UITableView tableview, nint section)
+	{
+		return Data.Count;
+	}
+	public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
+	{
+		// first, get or create a cell
+		UITableViewCell cell = tableView.DequeueReusableCell (identifier);
+		if (cell == null)
+		{ cell = new UITableViewCell (UITableViewCellStyle.Subtitle, identifier); }
+		// then, get the data and set the UI
+		cell.TextLabel.Text = Data[indexPath.Row].Name;
+        cell.DetailTextLabel.Text = Data[indexPath.Row].Location;
+		return cell;
+	}
+}
+```
+
+To display the data in the table, create the source object, assign the `Monkey` object list, then assign it to the table and call `ReloadData()`:
+
+```csharp
+var source = new MySource(); // create the class
+source.Data = monkeys;          // assign the list of strings
+tableView.Source = source;   // give it to the table view
+tableView.ReloadData();      // and show on the screen
+```
