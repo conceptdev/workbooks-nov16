@@ -1,0 +1,11 @@
+---
+uti: com.xamarin.workbook
+platform: Console
+packages: []
+---
+
+# Console
+
+```csharp
+var message = "Hello, Workbooks";
+```
